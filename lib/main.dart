@@ -1,17 +1,25 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'classes/car.dart';
 import 'classes/article.dart';
 import 'classes/client.dart';
 import 'pages/index.dart';
 
+Client? gClient;
+
 void main() async {
-  var curDir = Directory.current.path;
-  await Hive.initFlutter(curDir);
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // var curDir = Directory.current.path;
+  // if (kIsWeb) {
+  await Hive.initFlutter();
+  // } else {
+  //   await Hive.initFlutter("$curDir/db/");
+  // }
+
   Hive.registerAdapter(CarAdapter());
   Hive.registerAdapter(ArticleAdapter());
   Hive.registerAdapter(ClientAdapter());
@@ -19,7 +27,6 @@ void main() async {
   await Hive.openBox<Client>("clients");
   await Hive.openBox<Article>("articles");
 
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MainApp());
 }
 
@@ -28,13 +35,15 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Client client = clients.values.first;
+    if (gClient == null && clients.isNotEmpty) {
+      gClient = clients.values.first;
+    }
 
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.purple,
-        primaryColor: Colors.purple,
+        textTheme: GoogleFonts.almaraiTextTheme(),
         useMaterial3: true,
+        colorSchemeSeed: Colors.deepPurple,
         appBarTheme: AppBarTheme(
           iconTheme: IconThemeData(
             color: Colors.black,
@@ -43,14 +52,14 @@ class MainApp extends StatelessWidget {
           elevation: 0,
           titleTextStyle: TextStyle(
             color: Colors.black,
-            fontSize: 30,
+            fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       debugShowCheckedModeBanner: false,
       home: IndexPage(
-        client: client,
+        client: gClient,
       ),
     );
   }

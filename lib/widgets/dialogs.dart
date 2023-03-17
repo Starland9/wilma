@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../classes/article.dart';
 import './fields.dart';
 import 'package:getwidget/getwidget.dart';
@@ -17,16 +18,16 @@ class AddCarDialog extends StatefulWidget {
 
 class _AddCarDialogState extends State<AddCarDialog> {
   TextEditingController model = TextEditingController();
-  TextEditingController image = TextEditingController();
-  TextEditingController logo = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey();
+  String? image;
+  String? logo;
 
   @override
   void initState() {
     if (widget.k != null) {
       model.text = cars.get(widget.k)!.model;
-      image.text = cars.get(widget.k)!.carImagePath;
-      logo.text = cars.get(widget.k)!.carModelLogoPath;
+      image = cars.get(widget.k)!.carImagePath;
+      logo = cars.get(widget.k)!.carModelLogoPath;
     }
 
     super.initState();
@@ -51,13 +52,51 @@ class _AddCarDialogState extends State<AddCarDialog> {
                   hint: "Le model de la voiture",
                   type: GfFormFieldType.name,
                 ),
-                LSFormField(
-                  controller: image,
-                  hint: "L'image de la voiture",
+                GFListTile(
+                  avatar: image != null
+                      ? Image.network(
+                          image!,
+                          width: 100,
+                        )
+                      : null,
+                  titleText: "Choisir l'image",
+                  icon: GFIconButton(
+                      icon: Icon(Icons.image_search),
+                      onPressed: () {
+                        // ignore: invalid_use_of_visible_for_testing_member
+                        ImagePicker.platform
+                            .getImageFromSource(
+                          source: ImageSource.gallery,
+                        )
+                            .then((value) {
+                          setState(() {
+                            image = value?.path;
+                          });
+                        });
+                      }),
                 ),
-                LSFormField(
-                  controller: logo,
-                  hint: "Le logo de la voiture",
+                GFListTile(
+                  avatar: logo != null
+                      ? Image.network(
+                          logo!,
+                          width: 100,
+                        )
+                      : null,
+                  titleText: "Choisir le logo",
+                  icon: GFIconButton(
+                      icon: Icon(Icons.image_search),
+                      onPressed: () {
+                        // ignore: invalid_use_of_visible_for_testing_member
+                        ImagePicker.platform
+                            .getImageFromSource(
+                          source: ImageSource.gallery,
+                        )
+                            .then((value) {
+                          setState(() {
+                            logo = value?.path;
+                          });
+                        });
+                      }),
                 ),
                 GFButtonBar(
                   alignment: WrapAlignment.spaceBetween,
@@ -69,14 +108,18 @@ class _AddCarDialogState extends State<AddCarDialog> {
                           if (widget.k != null) {
                             var car = cars.get(widget.k)!;
                             car.model = model.text;
-                            car.carImagePath = image.text;
-                            car.carModelLogoPath = logo.text;
+                            car.carImagePath =
+                                image ?? "images/vehicules/acura.png";
+                            car.carModelLogoPath =
+                                logo ?? "images/vehicules/acura.png";
                             car.save();
                           } else {
                             cars.add(Car(
                               model: model.text,
-                              carImagePath: image.text,
-                              carModelLogoPath: logo.text,
+                              carImagePath:
+                                  image ?? "images/vehicules/acura.png",
+                              carModelLogoPath:
+                                  logo ?? "images/vehicules/acura.png",
                             ));
                           }
 
@@ -116,16 +159,16 @@ class DialogAddArticle extends StatefulWidget {
 class _DialogAddArticleState extends State<DialogAddArticle> {
   TextEditingController nom = TextEditingController();
   TextEditingController prix = TextEditingController();
-  TextEditingController image = TextEditingController();
   TextEditingController description = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey();
+
+  String? image;
 
   @override
   void initState() {
     if (widget.k != null) {
       var article = articles.get(widget.k)!;
       nom.text = article.nom;
-      image.text = article.imagePath;
       prix.text = article.prix.toString();
       description.text = article.description;
     }
@@ -152,9 +195,28 @@ class _DialogAddArticleState extends State<DialogAddArticle> {
                   hint: "Le nom de la pièce",
                   type: GfFormFieldType.name,
                 ),
-                LSFormField(
-                  controller: image,
-                  hint: "L'image de la pièce",
+                GFListTile(
+                  avatar: image != null
+                      ? Image.network(
+                          image!,
+                          width: 100,
+                        )
+                      : null,
+                  titleText: "Choisir l'image",
+                  icon: GFIconButton(
+                      icon: Icon(Icons.image_search),
+                      onPressed: () {
+                        // ignore: invalid_use_of_visible_for_testing_member
+                        ImagePicker.platform
+                            .getImageFromSource(
+                          source: ImageSource.gallery,
+                        )
+                            .then((value) {
+                          setState(() {
+                            image = value?.path;
+                          });
+                        });
+                      }),
                 ),
                 LSFormField(
                   controller: prix,
@@ -162,14 +224,14 @@ class _DialogAddArticleState extends State<DialogAddArticle> {
                   type: GfFormFieldType.number,
                 ),
                 GfFormField(
-                    gfFormFieldType: GfFormFieldType.text,
-                    editingbordercolor: Colors.black,
-                    idlebordercolor: Colors.black,
-                    borderwidth: 2,
-                    hintText: "Une petite description",
-                    minLines: 2,
-                    maxLines: 3,
-                    ),
+                  gfFormFieldType: GfFormFieldType.text,
+                  editingbordercolor: Colors.black,
+                  idlebordercolor: Colors.black,
+                  borderwidth: 2,
+                  hintText: "Une petite description",
+                  minLines: 2,
+                  maxLines: 3,
+                ),
                 GFButtonBar(
                   alignment: WrapAlignment.spaceBetween,
                   children: [
@@ -181,10 +243,16 @@ class _DialogAddArticleState extends State<DialogAddArticle> {
                             var article = articles.get(widget.k)!;
                             article.nom = nom.text;
                             article.description = description.text;
-                            article.imagePath = image.text;
+                            article.imagePath =
+                                image ?? "images/logo/logo-acura.png";
                             article.prix = double.parse(prix.text);
                           } else {
-                            articles.add(Article(nom: nom.text, description: description.text, prix: double.parse(prix.text), imagePath: image.text));
+                            articles.add(Article(
+                                nom: nom.text,
+                                description: description.text,
+                                prix: double.parse(prix.text),
+                                imagePath:
+                                    image ?? "images/logo/logo-acura.png"));
                           }
 
                           Navigator.of(context).pop();
@@ -206,6 +274,5 @@ class _DialogAddArticleState extends State<DialogAddArticle> {
         )
       ],
     );
-    
   }
 }

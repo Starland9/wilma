@@ -15,11 +15,15 @@ class Client extends HiveObject {
   @HiveField(3)
   String mdp;
 
+  @HiveField(4)
+  bool isAdmin;
+
   Client({
     required this.nom,
     required this.email,
     required this.phone,
     required this.mdp,
+    required this.isAdmin,
   });
 }
 

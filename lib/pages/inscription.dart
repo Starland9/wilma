@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:getwidget/getwidget.dart';
+import 'package:image_network/image_network.dart';
+import 'package:scaffold_gradient_background/scaffold_gradient_background.dart';
 import 'package:wilma/classes/client.dart';
 import 'package:wilma/logic/nav.dart';
 
@@ -22,12 +25,14 @@ class _InscriptionPageState extends State<InscriptionPage> {
   TextEditingController phone = TextEditingController();
   TextEditingController mdp = TextEditingController();
   TextEditingController cMdp = TextEditingController();
+  bool isAdmin = false;
 
   GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldGradientBackground(
+      gradient: LinearGradient(colors: const [Colors.orange, Colors.amber]),
       body: Center(
         child: SizedBox(
           width: 500,
@@ -39,7 +44,10 @@ class _InscriptionPageState extends State<InscriptionPage> {
               children: [
                 Text(
                   "S'INSCRIRE",
-                  style: Theme.of(context).textTheme.headlineLarge,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 70,
@@ -69,9 +77,22 @@ class _InscriptionPageState extends State<InscriptionPage> {
                   hint: "Confirmation du Mot de passe",
                   type: GfFormFieldType.password,
                 ),
+                GFCheckboxListTile(
+                    titleText: "Administrateur ?",
+                    color: Colors.white.withOpacity(0.9),
+                    value: isAdmin,
+                    onChanged: (v) {
+                      setState(() {
+                        isAdmin = v;
+                      });
+                    }),
+                SizedBox(
+                  height: 20,
+                ),
                 GFButtonBar(
                   children: [
                     GFButton(
+                      size: 40,
                       onPressed: () {
                         var formValide = formKey.currentState!.validate();
                         if (formValide) {
@@ -80,6 +101,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                             email: email.text,
                             phone: phone.text,
                             mdp: mdp.text,
+                            isAdmin: isAdmin,
                           ));
                           pushRemove(context, ConnexionPage());
                         }
@@ -87,6 +109,7 @@ class _InscriptionPageState extends State<InscriptionPage> {
                       text: "S'INSCRIRE",
                     ),
                     GFButton(
+                      size: 40,
                       onPressed: () {
                         pushRemove(context, ConnexionPage());
                       },
@@ -100,6 +123,5 @@ class _InscriptionPageState extends State<InscriptionPage> {
         ),
       ),
     );
-    
   }
 }

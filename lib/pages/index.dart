@@ -1,66 +1,168 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:wilma/logic/nav.dart';
+import 'package:wilma/pages/admin/admin_global.dart';
+import 'package:wilma/pages/articles.dart';
+import 'package:wilma/pages/choix_model.dart';
+import 'package:wilma/pages/connexion.dart';
 import '../classes/client.dart';
-import '../logic/nav.dart';
-import 'admin_global.dart';
-import 'choix_model.dart';
-import 'choix_reparation.dart';
-import 'connexion.dart';
+import '../logic/auth.dart';
 
 class IndexPage extends StatelessWidget {
-  const IndexPage({super.key, this.client});
+  IndexPage({super.key, this.client});
 
   final Client? client;
+
+  Map<String, dynamic> links = {
+    // "Acceuil": null,
+    // "A propos": null,
+    // "Nos services": null,
+    // "Contactez nous": null,
+  };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("WILMA AUTO"),
-        actions: [
-          if (client == null)
-            GFButton(
-              onPressed: () {
-                pushRemove(context, ConnexionPage());
-              },
-              text: "SE CONNECTER",
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              width: double.maxFinite,
+              height: 500,
+              child: Column(
+                children: [
+                  AppBar(
+                    backgroundColor: Colors.amber,
+                    title: Text(
+                      "Wilma Auto",
+                      style: GoogleFonts.aboreto(
+                        fontSize: 22,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    actions: [
+                      SizedBox(
+                        width: 300,
+                        child: Padding(
+                          padding: EdgeInsets.all(1),
+                          child: GFTextFieldSquared(
+                            color: Colors.white,
+                            editingbordercolor: Theme.of(context).primaryColor,
+                            idlebordercolor: Colors.grey,
+                            borderwidth: 0.5,
+                            hintText: "Rechercher...",
+                          ),
+                        ),
+                      ),
+                      if (isAdmin())
+                        IconButton(
+                            onPressed: () {
+                              push(context, AdminGlobalPage());
+                            },
+                            icon: Icon(Icons.admin_panel_settings))
+                      else
+                        GFButton(
+                          onPressed: () {
+                            pushRemove(context, ConnexionPage());
+                          },
+                          text: "CONNEXION",
+                          size: 35,
+                        ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Image.asset("images/vehicules/acura.png"),
+                        Column(
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            SizedBox(
+                              width: 500,
+                              child: Text(
+                                "Nous vous offrons nos meilleurs services de reparation pas chers et avec confiance.",
+                                softWrap: true,
+                                style: TextStyle(
+                                  fontSize: 50,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              decoration: BoxDecoration(
+                color: Colors.amber.shade400,
+              ),
             ),
-          if (client != null &&
-              (client!.email.contains("landry") ||
-                  client!.email.contains("wilma")))
-            GFButton(
-              onPressed: () {
-                push(context, AdminGlobalPage());
-              },
-              text: "ADMIN",
+            Divider(),
+            Text(
+              "Nos Services",
+              style: TextStyle(
+                fontSize: 35,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          if (client != null)
-            GFButton(
-              onPressed: () {
-                pushRemove(context, ConnexionPage());
-              },
-              text: "DECONNEXION",
-              color: Colors.red,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              // ignore: prefer_const_literals_to_create_immutables
+              children: [
+                SizedBox(
+                  width: 400,
+                  height: 500,
+                  child: GFCard(
+                    title: GFListTile(
+                      titleText: "REPARATION DE VOITURE",
+                    ),
+                    buttonBar: GFButtonBar(children: [
+                      GFButton(
+                        onPressed: () {
+                          push(context, ChoixModelPage());
+                        },
+                        text: "ALLONS Y",
+                        size: 40,
+                        fullWidthButton: true,
+                        shape: GFButtonShape.square,
+                      ),
+                    ]),
+                    content: Image.asset("images/serv/rep.png"),
+                  ),
+                ),
+                SizedBox(
+                  width: 400,
+                  height: 500,
+                  child: GFCard(
+                    title: GFListTile(
+                      titleText: "VENTE DE PIECES DE RECHANGE",
+                    ),
+                    content: Image.asset("images/serv/mot.png"),
+                    buttonBar: GFButtonBar(children: [
+                      GFButton(
+                        shape: GFButtonShape.square,
+                        onPressed: () {
+                          push(context, ArticlePage());
+                        },
+                        text: "ALLONS Y",
+                        size: 40,
+                        fullWidthButton: true,
+                      ),
+                    ]),
+                  ),
+                )
+              ],
             ),
-        ],
-      ),
-      body: Center(
-        child: GFButtonBar(children: [
-          GFButton(
-            onPressed: () {
-              push(context, ChoixModelPage());
-            },
-            text: "REPARATION DE VOITURE",
-          ),
-          GFButton(
-            onPressed: () {
-              push(context, ChoixReparation());
-            },
-            text: "ACHAT DE PIECES DE VOITURE",
-          ),
-        ]),
+          ],
+        ),
       ),
     );
   }

@@ -1,19 +1,19 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import '../classes/car.dart';
 import 'package:getwidget/getwidget.dart';
 
-import '../widgets/dialogs.dart';
+import '../../classes/article.dart';
+import '../../widgets/dialogs.dart';
 
-class AdminPage extends StatefulWidget {
-  const AdminPage({super.key});
+class AdminArticlesPage extends StatefulWidget {
+  const AdminArticlesPage({super.key});
 
   @override
-  State<AdminPage> createState() => _AdminPageState();
+  State<AdminArticlesPage> createState() => _AdminArticlesPageState();
 }
 
-class _AdminPageState extends State<AdminPage> {
+class _AdminArticlesPageState extends State<AdminArticlesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,22 +27,26 @@ class _AdminPageState extends State<AdminPage> {
               columns: [
                 DataColumn(label: Text("N°")),
                 DataColumn(label: Text("IMAGE")),
-                DataColumn(label: Text("MODEL")),
+                DataColumn(label: Text("NOM")),
+                DataColumn(label: Text("PRIX")),
+                DataColumn(label: Text("DESCRIPTION")),
                 DataColumn(label: Text("MODIFIER")),
                 DataColumn(label: Text("SUPPRIMER")),
               ],
-              rows: cars.values
+              rows: articles.values
                   .map((e) => DataRow(cells: [
                         DataCell(Text((e.key + 1).toString())),
                         DataCell(
                           Image.asset(
-                            "images/vehicules/${e.carImagePath}",
+                            "images/icons/icon-carosserie.png",
                             filterQuality: FilterQuality.medium,
-                            width: 300,
+                            // width: 300,
                             // scale: 0.5,
                           ),
                         ),
-                        DataCell(Text(e.model)),
+                        DataCell(Text(e.nom)),
+                        DataCell(Text("${e.prix} FCFA")),
+                        DataCell(Text(e.description)),
                         DataCell(
                           GFIconButton(
                             icon: Icon(Icons.edit),
@@ -50,8 +54,8 @@ class _AdminPageState extends State<AdminPage> {
                               showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return AddCarDialog(
-                                    k: e.key,
+                                  return DialogAddArticle(
+                                    k: e,
                                   );
                                 },
                               ).then((value) {
@@ -66,7 +70,7 @@ class _AdminPageState extends State<AdminPage> {
                             icon: Icon(Icons.delete),
                             onPressed: () {
                               setState(() {
-                                cars.delete(e.key);
+                                articles.delete(e.key);
                               });
                             },
                             color: Colors.red,
@@ -83,14 +87,14 @@ class _AdminPageState extends State<AdminPage> {
           showDialog(
             context: context,
             builder: (context) {
-              return AddCarDialog();
+              return DialogAddArticle();
             },
           ).then((value) {
             setState(() {});
           });
         },
         label: Text(
-          "Ajouter une voiture",
+          "Ajouter une nouvelle piece de voiture",
         ),
       ),
     );

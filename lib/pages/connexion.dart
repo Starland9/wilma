@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:scaffold_gradient_background/scaffold_gradient_background.dart';
 import 'package:wilma/classes/client.dart';
 import 'package:wilma/logic/nav.dart';
+import 'package:wilma/main.dart';
 
 import '../widgets/fields.dart';
 import 'package:getwidget/getwidget.dart';
@@ -24,7 +27,8 @@ class _ConnexionPageState extends State<ConnexionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldGradientBackground(
+      gradient: LinearGradient(colors: const [Colors.orange, Colors.amber]),
       body: Center(
         child: SizedBox(
           width: 500,
@@ -36,7 +40,10 @@ class _ConnexionPageState extends State<ConnexionPage> {
               children: [
                 Text(
                   "SE CONNECTER",
-                  style: Theme.of(context).textTheme.headlineLarge,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 70,
@@ -51,6 +58,9 @@ class _ConnexionPageState extends State<ConnexionPage> {
                   hint: "Mot de passe",
                   type: GfFormFieldType.password,
                 ),
+                SizedBox(
+                  height: 20,
+                ),
                 GFButtonBar(
                   children: [
                     GFButton(
@@ -60,6 +70,7 @@ class _ConnexionPageState extends State<ConnexionPage> {
                           try {
                             var client = clients.values.firstWhere((c) =>
                                 c.email == email.text && c.mdp == mdp.text);
+                            gClient = client;
                             pushRemove(
                                 context,
                                 IndexPage(
@@ -75,8 +86,10 @@ class _ConnexionPageState extends State<ConnexionPage> {
                         }
                       },
                       text: "SE CONNECTER",
+                      size: 40,
                     ),
                     GFButton(
+                      size: 40,
                       onPressed: () {
                         pushRemove(context, InscriptionPage());
                       },

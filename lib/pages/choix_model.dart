@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:flutter/material.dart';
+import 'package:wilma/logic/nav.dart';
+import 'package:wilma/pages/form_rep.dart';
 
 import '../classes/car.dart';
 
@@ -33,7 +36,9 @@ class _ChoixModelPageState extends State<ChoixModelPage> {
               runAlignment: WrapAlignment.center,
               children: cars.values
                   .map((e) => InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          push(context, FromReparationPage(car: e));
+                        },
                         onFocusChange: (e) {
                           setState(() {
                             if (e) {
@@ -47,8 +52,8 @@ class _ChoixModelPageState extends State<ChoixModelPage> {
                           elevation: elevation,
                           child: Padding(
                             padding: const EdgeInsets.all(15),
-                            child: Image.asset(
-                              "images/logos/${e.carModelLogoPath}",
+                            child: CachedNetworkImage(
+                              imageUrl: e.carModelLogoPath,
                               width: 250,
                               filterQuality: FilterQuality.medium,
                             ),

@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
-import '../classes/client.dart';
+import '../../classes/client.dart';
+
 
 class AdminClient extends StatefulWidget {
   const AdminClient({super.key});
