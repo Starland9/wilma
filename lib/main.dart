@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'classes/car.dart';
 import 'classes/article.dart';
+import 'classes/cart.dart';
 import 'classes/client.dart';
+import 'classes/order.dart';
 import 'pages/index.dart';
 
 Client? gClient;
@@ -23,9 +26,14 @@ void main() async {
   Hive.registerAdapter(CarAdapter());
   Hive.registerAdapter(ArticleAdapter());
   Hive.registerAdapter(ClientAdapter());
+  Hive.registerAdapter(CartAdapter());
+  Hive.registerAdapter(OrderAdapter());
   await Hive.openBox<Car>("cars");
   await Hive.openBox<Client>("clients");
+  await Hive.openBox<Cart>("carts");
+  await Hive.openBox<Order>("orders");
   await Hive.openBox<Article>("articles");
+  await FastCachedImageConfig.init(clearCacheAfter: Duration(days: 1));
 
   runApp(const MainApp());
 }
