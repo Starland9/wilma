@@ -18,18 +18,21 @@ class OrderAdapter extends TypeAdapter<Order> {
     };
     return Order(
       date: fields[0] as DateTime,
-      cart: fields[1] as Cart,
+      car: fields[1] as Car,
+      message: fields[2] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Order obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.date)
       ..writeByte(1)
-      ..write(obj.cart);
+      ..write(obj.car)
+      ..writeByte(2)
+      ..write(obj.message);
   }
 
   @override

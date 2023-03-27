@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wilma/logic/nav.dart';
+import 'package:wilma/main.dart';
 import 'package:wilma/pages/admin/admin_global.dart';
 import 'package:wilma/pages/articles.dart';
 import 'package:wilma/pages/choix_model.dart';
 import 'package:wilma/pages/connexion.dart';
+import 'package:wilma/pages/profile/profil.dart';
 import '../classes/client.dart';
 import '../logic/auth.dart';
 
@@ -44,19 +46,14 @@ class IndexPage extends StatelessWidget {
                       ),
                     ),
                     actions: [
-                      SizedBox(
-                        width: 300,
-                        child: Padding(
-                          padding: EdgeInsets.all(1),
-                          child: GFTextFieldSquared(
-                            color: Colors.white,
-                            editingbordercolor: Theme.of(context).primaryColor,
-                            idlebordercolor: Colors.grey,
-                            borderwidth: 0.5,
-                            hintText: "Rechercher...",
-                          ),
-                        ),
-                      ),
+                      if (gClient != null)
+                        IconButton(
+                            onPressed: () {
+                              push(context, ProfilPage());
+                            },
+                            icon: Icon(
+                              Icons.person_pin_circle_rounded,
+                            )),
                       if (isAdmin())
                         IconButton(
                             onPressed: () {

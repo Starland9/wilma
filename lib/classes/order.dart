@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'cart.dart';
+import 'car.dart';
 
 part 'order.g.dart';
 
@@ -10,11 +10,15 @@ class Order extends HiveObject {
   DateTime date;
 
   @HiveField(1)
-  Cart cart;
+  Car car;
+
+   @HiveField(2)
+  String message;
 
   Order({
     required this.date,
-    required this.cart,
+    required this.car,
+    required this.message,
   });
 }
 

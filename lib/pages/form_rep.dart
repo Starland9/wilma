@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:image_network/image_network.dart';
 import 'package:wilma/classes/car.dart';
+import 'package:wilma/classes/order.dart';
 import 'package:wilma/logic/nav.dart';
 import 'package:wilma/main.dart';
 import 'package:wilma/pages/index.dart';
@@ -93,6 +94,13 @@ class _FromReparationPageState extends State<FromReparationPage> {
                 ),
                 GFButton(
                   onPressed: () {
+                    orders.add(
+                      Order(
+                        date: DateTime.parse(dateRdv.text),
+                        car: widget.car,
+                        message: comment.text,
+                      ),
+                    );
                     GFToast.showToast(
                         "Votre message a bien ete envoye !", context);
                     pushRemove(

@@ -4,6 +4,7 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:wilma/pages/profile/profil.dart';
 import 'classes/car.dart';
 import 'classes/article.dart';
 import 'classes/cart.dart';
@@ -49,7 +50,7 @@ class MainApp extends StatelessWidget {
 
     return MaterialApp(
       theme: ThemeData(
-        textTheme: GoogleFonts.almaraiTextTheme(),
+        textTheme: GoogleFonts.aBeeZeeTextTheme(),
         useMaterial3: true,
         colorSchemeSeed: Colors.deepPurple,
         appBarTheme: AppBarTheme(
@@ -66,9 +67,7 @@ class MainApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: IndexPage(
-        client: gClient,
-      ),
+      home: IndexPage(),
     );
   }
 }
